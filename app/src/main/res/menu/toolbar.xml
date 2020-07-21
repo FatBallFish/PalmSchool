@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/toolbar_addLesson"
+        android:checkable="false"
+        android:title="@string/toolbar_addLessons"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/toolbar_editLessons"
+        android:title="@string/toolbar_editLessons"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/toolbar_deleteLessons"
+        android:title="@string/toolbar_deleteLessons"
+        app:showAsAction="never" />
+</menu>

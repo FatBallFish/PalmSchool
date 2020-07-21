@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">掌上和山</string>
+    <string name="nav_lessons">课程</string>
+    <string name="nav_tasks">计划</string>
+    <string name="nav_communication">发现</string>
+    <string name="nav_mine">我的</string>
+    <string name="nav_nameHint">未登录</string>
+    <string name="nav_mottoHint">请先登录后再操作</string>
+    <string name="toolbar_addLessons">添加课程</string>
+    <string name="toolbar_editLessons">编辑课程</string>
+    <string name="toolbar_deleteLessons">删除课程</string>
+
+</resources>

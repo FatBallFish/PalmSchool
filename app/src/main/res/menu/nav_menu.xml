@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group        android:checkableBehavior="single" >
+        <item
+            android:id="@+id/navLessons"
+            android:icon="@drawable/ic_lessons"
+            android:title="@string/nav_lessons" />
+        <item
+            android:id="@+id/navTasks"
+            android:icon="@drawable/ic_tasks"
+            android:title="@string/nav_tasks" />
+        <item
+            android:id="@+id/navcommunication"
+            android:icon="@drawable/ic_communication"
+            android:title="@string/nav_communication" />
+        <item
+            android:id="@+id/navMine"
+            android:icon="@drawable/ic_mine"
+            android:title="@string/nav_mine" />
+    </group>
+</menu>
