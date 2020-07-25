@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_navigation"
+    app:startDestination="@id/passLoginFragment">
+
+    <fragment
+        android:id="@+id/smsLoginFragment"
+        android:name="com.fatballfish.palmschool.ui.login.SmsLoginFragment"
+        android:label="@string/login_btn"
+        tools:layout="@layout/fragment_sms_login">
+        <action
+            android:id="@+id/action_smsLoginFragment_to_passLoginFragment2"
+            app:destination="@id/passLoginFragment"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left" />
+    </fragment>
+    <fragment
+        android:id="@+id/passLoginFragment"
+        android:name="com.fatballfish.palmschool.ui.login.PassLoginFragment"
+        android:label="@string/login_btn"
+        tools:layout="@layout/fragment_pass_login">
+        <action
+            android:id="@+id/action_passLoginFragment_to_smsLoginFragment2"
+            app:destination="@id/smsLoginFragment"
+            app:enterAnim="@anim/in_from_right"
+            app:exitAnim="@anim/out_to_left" />
+    </fragment>
+</navigation>

@@ -1,5 +1,6 @@
 package com.fatballfish.palmschool
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
@@ -8,6 +9,9 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import com.fatballfish.palmschool.ui.login.LoginActivity
+import com.google.android.material.snackbar.Snackbar
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +25,14 @@ class MainActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_menu)
         }
         // 设置侧滑容器
+        // 手动设置header_layout,为了定义头布局的响应事件
+        val nav_headerView = navView.inflateHeaderView(R.layout.nav_header)
+        // 获得头像组件
+        val image_portrait = nav_headerView.findViewById<CircleImageView>(R.id.img_portrait)
+        image_portrait.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
         navView.setCheckedItem(R.id.navLessons) // 设置默认选中菜单
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
@@ -39,6 +51,12 @@ class MainActivity : AppCompatActivity() {
             }
             view_drawerLayout.closeDrawers()
             true
+        }
+
+        // 设置浮动按钮
+        fab.setOnClickListener {
+            Toast.makeText(this, "浮动按钮被单击", Toast.LENGTH_SHORT).show()
+            Snackbar.make(it, "浮动按钮被单击", Snackbar.LENGTH_SHORT).show()
         }
     }
 

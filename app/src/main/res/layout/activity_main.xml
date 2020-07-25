@@ -23,6 +23,26 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
         </com.google.android.material.appbar.AppBarLayout>
 
+        <FrameLayout
+            android:id="@+id/layout_HomeFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <fragment
+                android:name="com.fatballfish.palmschool.ui.lessons.LessonFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_plus" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -31,6 +51,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header"
         app:menu="@menu/nav_menu" />
+    <!--去除app:headerLayout="@layout/nav_header"，在代码里手动添加，为了监听事件-->
 </androidx.drawerlayout.widget.DrawerLayout>
