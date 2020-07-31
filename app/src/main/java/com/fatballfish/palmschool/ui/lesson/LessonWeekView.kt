@@ -1,10 +1,8 @@
-package com.fatballfish.palmschool.ui.lessons
+package com.fatballfish.palmschool.ui.lesson
 
 import android.content.Context
-import android.graphics.Color
 import android.util.AttributeSet
 import android.view.ViewGroup
-import com.fatballfish.palmschool.R
 
 class LessonWeekView(context: Context, attrs: AttributeSet) : ViewGroup(context, attrs) {
     private val widthLine = 7

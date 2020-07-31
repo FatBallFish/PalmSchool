@@ -2,6 +2,7 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_swipeRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:windowBackground">
@@ -191,39 +192,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <com.fatballfish.palmschool.ui.lessons.LessonBackGroundView
+                    <com.fatballfish.palmschool.ui.lesson.LessonBackGroundView
                         android:id="@+id/layout_lessonBackground"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 
-                    <com.fatballfish.palmschool.ui.lessons.LessonWeekView
+                    <com.fatballfish.palmschool.ui.lesson.LessonWeekView
                         android:id="@+id/layout_lessonWeek"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <com.fatballfish.palmschool.ui.lessons.LessonCardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:cardBackgroundColor="@color/colorPrimary"
-                            app:cardCornerRadius="4dp"
-                            app:cardElevation="8dp"
-
-                            app:lessonInfo="计算机组成与原理\n虞建东\nA2-101(1-16周)"
-                            app:lessonWeek="1"
-                            app:startClass="1"
-                            app:stopClass="2" />
-
-                        <com.fatballfish.palmschool.ui.lessons.LessonCardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:cardBackgroundColor="@color/colorPrimary"
-                            app:cardCornerRadius="4dp"
-                            app:cardElevation="8dp"
-                            app:lessonInfo="计算机组成与原理\n虞建东\nA2-101(1-16周)"
-                            app:lessonWeek="2"
-                            app:startClass="6"
-                            app:stopClass="9" />
-                    </com.fatballfish.palmschool.ui.lessons.LessonWeekView>
+                        android:layout_height="match_parent" />
 
                 </RelativeLayout>
 

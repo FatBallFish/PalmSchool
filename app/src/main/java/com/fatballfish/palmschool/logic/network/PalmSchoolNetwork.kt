@@ -1,9 +1,11 @@
 package com.fatballfish.palmschool.logic.network
 
-import com.fatballfish.palmschool.logic.model.PassLoginRequest
-import com.fatballfish.palmschool.logic.model.SmsCaptchaCreateRequest
-import com.fatballfish.palmschool.logic.model.SmsCaptchaValidateRequest
-import com.fatballfish.palmschool.logic.model.SmsLoginRequest
+import com.fatballfish.palmschool.logic.model.lesson.LessonTemplateListRequest
+import com.fatballfish.palmschool.logic.model.lesson.LessonTemplateService
+import com.fatballfish.palmschool.logic.model.user.PassLoginRequest
+import com.fatballfish.palmschool.logic.model.user.SmsCaptchaCreateRequest
+import com.fatballfish.palmschool.logic.model.user.SmsCaptchaValidateRequest
+import com.fatballfish.palmschool.logic.model.user.SmsLoginRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,6 +38,26 @@ object PalmSchoolNetwork {
         smsCaptchaService.validateSmsCaptcha(smsCaptchaValidateRequest).await()
     // 注册服务
 
+    // 课程服务
+    val lessonTemplateService = ServiceCreator.create<LessonTemplateService>()
+
+    // 获取个人课程列表
+    suspend fun getLessonTemplateList(lessonTemplateListRequest: LessonTemplateListRequest) =
+        lessonTemplateService.getLessonTemplateList(
+            lessonTemplateListRequest.token,
+            lessonTemplateListRequest.tid
+        ).await()
+
+    // 模版服务
+    val templateService = ServiceCreator.create<TemplateService>()
+    suspend fun getTemplateList(token: String, map: Map<String, String>?) =
+        templateService.getTemplateList(token, map).await()
+
+    // 用户信息服务
+    val userInfoService = ServiceCreator.create<UserInfoService>()
+
+    // 获取用户信息
+    suspend fun getUserInfo(token: String) = userInfoService.getUserInfo(token).await()
 
     // 高级拓展函数，实现请求回调
     private suspend fun <T> Call<T>.await(): T {

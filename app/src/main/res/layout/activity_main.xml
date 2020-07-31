@@ -31,10 +31,20 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <fragment
-                android:name="com.fatballfish.palmschool.ui.lessons.LessonFragment"
+                android:id="@+id/fragment_lesson"
+                android:name="com.fatballfish.palmschool.ui.lesson.LessonFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </FrameLayout>
+
+        <com.nightonke.boommenu.BoomMenuButton
+            android:id="@+id/bmb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            app:bmb_buttonEnum="textOutsideCircle"
+            app:bmb_buttonPlaceEnum="buttonPlace_sc_2_1"
+            app:bmb_piecePlaceEnum="piecePlace_dot_2_1" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
@@ -42,7 +52,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_plus" />
+            android:src="@drawable/ic_plus"
+            android:visibility="gone" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

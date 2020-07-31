@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.fatballfish.palmschool.logic.Repository
-import com.fatballfish.palmschool.logic.model.PassLoginRequest
-import com.fatballfish.palmschool.logic.model.SmsLoginRequest
+import com.fatballfish.palmschool.logic.model.user.PassLoginRequest
+import com.fatballfish.palmschool.logic.model.user.SmsLoginRequest
 
 class SmsLoginViewModel : ViewModel() {
     private val smsLiveData = MutableLiveData<SmsLoginRequest>()
@@ -20,8 +20,17 @@ class SmsLoginViewModel : ViewModel() {
         this.username = username
         this.hash = hash
         this.enduring = enduring
-        smsLiveData.value = SmsLoginRequest(username, hash, enduring)
+        smsLiveData.value =
+            SmsLoginRequest(
+                username,
+                hash,
+                enduring
+            )
     }
+
+    fun saveToken(token: String) = Repository.saveToken(token)
+    fun isTokenSaved() = Repository.isTokenSaved()
+    fun getToken() = Repository.getToken()
 }
 
 class PassLoginViewModel : ViewModel() {
@@ -37,6 +46,15 @@ class PassLoginViewModel : ViewModel() {
         this.username = username
         this.password = password
         this.enduring = enduring
-        smsLiveData.value = PassLoginRequest(username, password, enduring)
+        smsLiveData.value =
+            PassLoginRequest(
+                username,
+                password,
+                enduring
+            )
     }
+
+    fun saveToken(token: String) = Repository.saveToken(token)
+    fun isTokenSaved() = Repository.isTokenSaved()
+    fun getToken() = Repository.getToken()
 }

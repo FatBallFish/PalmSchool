@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.fatballfish.palmschool.logic.Repository
-import com.fatballfish.palmschool.logic.model.SmsCaptchaCreateRequest
-import com.fatballfish.palmschool.logic.model.SmsCaptchaValidateRequest
+import com.fatballfish.palmschool.logic.model.user.SmsCaptchaCreateRequest
+import com.fatballfish.palmschool.logic.model.user.SmsCaptchaValidateRequest
 import com.fatballfish.palmschool.logic.util.MD5Utils
 
 class SmsCaptchaCreateViewModel : ViewModel() {
@@ -18,7 +18,10 @@ class SmsCaptchaCreateViewModel : ViewModel() {
 
     fun smsCaptchaCreate(phone: String) {
         this.phone = phone
-        requestLiveData.value = SmsCaptchaCreateRequest(phone)
+        requestLiveData.value =
+            SmsCaptchaCreateRequest(
+                phone
+            )
     }
 }
 

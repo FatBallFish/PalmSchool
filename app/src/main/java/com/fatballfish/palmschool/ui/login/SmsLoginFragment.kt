@@ -1,5 +1,6 @@
 package com.fatballfish.palmschool.ui.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.Gravity
@@ -13,6 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.fatballfish.palmschool.R
+import com.fatballfish.palmschool.logic.dao.ActivityDao
 
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_sms_login.*
@@ -51,13 +53,23 @@ class SmsLoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity?.setResult(ActivityDao.RESULT_CANCEL)
         // 登录事件viewModel
         smsLoginViewModel.smsLoginLiveData.observe(viewLifecycleOwner, Observer { result ->
             val data = result.getOrNull()
             if (data != null) {
                 val token = data.token
                 val loginType = data.loginType
-                Snackbar.make(btn_smsLogin, "$loginType|$token", Snackbar.LENGTH_SHORT).show()
+                smsLoginViewModel.saveToken(token)
+                val intent = Intent()
+                val phone = edit_username.text.toString()
+                intent
+                    .putExtra("phone", phone)
+                    .putExtra("token", token)
+                    .putExtra("login_type", loginType)
+                activity?.setResult(ActivityDao.RESULT_OK, intent)
+                activity?.finish()
+//                Snackbar.make(btn_smsLogin, "$loginType|$token", Snackbar.LENGTH_SHORT).show()
             } else {
                 result.exceptionOrNull()?.printStackTrace()
                 Snackbar.make(
@@ -92,7 +104,7 @@ class SmsLoginFragment : Fragment() {
             Observer { result ->
                 val data = result.getOrNull()
                 if (data != null) {
-                    if (phone == null) {
+                    if (phone == null || phone == "") {
                         Snackbar.make(btn_smsLogin, "请输入手机号", Snackbar.LENGTH_SHORT).show()
                     } else {
                         smsLoginViewModel.smsLogin(phone!!, smsCaptchaValidateViewModel.hash)
@@ -107,7 +119,7 @@ class SmsLoginFragment : Fragment() {
             phone = edit_username.text.toString()
             // 先进行验证码判断，成功后再执行登录操作
             smsCode = edit_smsCode.text.toString()
-            if (phone == "" || smsCode == "") {
+            if (phone == "" || phone == null || smsCode == "" || smsCode == null) {
                 Snackbar.make(
                     btn_smsLogin,
                     "phone or smsCode can't be empty",

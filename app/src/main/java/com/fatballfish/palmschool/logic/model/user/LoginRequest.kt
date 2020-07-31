@@ -1,4 +1,4 @@
-package com.fatballfish.palmschool.logic.model
+package com.fatballfish.palmschool.logic.model.user
 
 import com.google.gson.annotations.SerializedName
 

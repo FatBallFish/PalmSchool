@@ -1,4 +1,4 @@
-package com.fatballfish.palmschool.logic.model
+package com.fatballfish.palmschool.logic.model.user
 
 data class SmsCaptchaCreateResponse(
     val id: Int,

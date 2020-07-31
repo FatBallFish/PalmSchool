@@ -19,10 +19,15 @@
     <string name="hint_login_username">请输入手机号</string>
     <string name="hint_login_password">请输入密码</string>
     <string name="hint_login_smsCode">请输入5位验证码</string>
+    <string name="hint_search_template">请输入关键字</string>
     <string name="login_btn">登录</string>
     <string name="login_getsms_btn">获取验证码</string>
     <string name="login_use_sms">使用手机短信登录</string>
     <string name="login_use_pass">使用账号密码登录</string>
+    <string name="userInfo_title">我的信息</string>
+    <string name="menu_setting">设置</string>
+    <string name="setting_updateUserInfo">编辑资料</string>
+    <string name="setting_logout">退出登录</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

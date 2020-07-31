@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_userInfo"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.mine.UserInfoActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_userInfo"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:contentScrim="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <ImageView
+                android:id="@+id/image_infoBackGround"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax" />
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_userInfo"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin">
+
+                <TextView
+                    android:id="@+id/toolbarText_userInfo"
+                    style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/userInfo_title"
+                    android:textColor="@android:color/white" />
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/appbar_userInfo"
+        app:layout_anchorGravity="bottom|start">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_portrait"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_default" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/image_portrait"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:gravity="bottom"
+                android:text="NickName"
+                android:textColor="#fff"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/text_username"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="username"
+                android:textColor="#000"
+                android:textSize="16sp"
+                android:transformPivotY="16dp"
+                app:layout_anchor="@id/appbar_userInfo"
+                app:layout_anchorGravity="end|bottom" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:gravity="center_vertical"
+                    android:text="男"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    android:transformPivotY="16dp"
+                    app:layout_anchor="@id/appbar_userInfo"
+                    app:layout_anchorGravity="end|bottom" />
+
+                <TextView
+                    android:id="@+id/text_school"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="浙江科技学院"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    android:transformPivotY="16dp"
+                    app:layout_anchor="@id/appbar_userInfo"
+                    app:layout_anchorGravity="end|bottom" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/view_nestedScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="38dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp" />
+
+    </androidx.core.widget.NestedScrollView>
+    <!--加层灰色蒙版-->
+    <LinearLayout
+        android:id="@+id/bottom_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80A1A0A0"
+        android:clickable="true"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/bottom_setting"
+        layout="@layout/bottom_userinfo_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        app:layout_behavior="@string/bottom_sheet_behavior" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

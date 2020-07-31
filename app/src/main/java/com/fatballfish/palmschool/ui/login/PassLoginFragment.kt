@@ -1,5 +1,6 @@
 package com.fatballfish.palmschool.ui.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.fatballfish.palmschool.R
+import com.fatballfish.palmschool.logic.dao.ActivityDao
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_pass_login.*
 import kotlinx.android.synthetic.main.fragment_pass_login.edit_username
@@ -44,12 +46,22 @@ class PassLoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity?.setResult(ActivityDao.RESULT_CANCEL)
         viewModel.passLoginLiveData.observe(viewLifecycleOwner, Observer { result ->
             val data = result.getOrNull()
             if (data != null) {
+                val phone = edit_username.text.toString()
                 val token = data.token
                 val loginType = data.loginType
-                Snackbar.make(btn_passLogin, "$loginType|$token", Snackbar.LENGTH_SHORT).show()
+                viewModel.saveToken(token)
+                val intent = Intent()
+                intent
+                    .putExtra("phone", phone)
+                    .putExtra("token", token)
+                    .putExtra("login_type", loginType)
+                activity?.setResult(ActivityDao.RESULT_OK, intent)
+                activity?.finish()
+//                Snackbar.make(btn_passLogin, "$loginType|$token", Snackbar.LENGTH_SHORT).show()
             } else {
                 result.exceptionOrNull()?.printStackTrace()
                 Snackbar.make(

@@ -1,4 +1,4 @@
-package com.fatballfish.palmschool.ui.lessons
+package com.fatballfish.palmschool.ui.lesson
 
 import android.content.Context
 import android.graphics.Canvas
@@ -6,8 +6,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import android.widget.RelativeLayout
-import com.fatballfish.palmschool.R
 
 class LessonBackGroundView(context: Context,attrs:AttributeSet) : View(context,attrs) {
     private val widthLine = 7
