@@ -1,16 +1,15 @@
 package com.fatballfish.palmschool.ui.mine
 
+import android.content.Intent
 import android.graphics.Color
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,11 +19,13 @@ import com.fatballfish.palmschool.logic.dao.ActivityDao
 import com.fatballfish.palmschool.logic.model.mine.UserInfoItem
 import com.fatballfish.palmschool.logic.model.mine.getInfoItem
 import com.fatballfish.palmschool.logic.util.TimeStampUtil
+import com.fatballfish.palmschool.ui.login.LoginActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_user_info.*
 import kotlinx.android.synthetic.main.bottom_userinfo_setting.*
+import kotlinx.android.synthetic.main.nav_header.*
 
 
 class UserInfoActivity : AppCompatActivity() {
@@ -52,10 +53,14 @@ class UserInfoActivity : AppCompatActivity() {
             val data = result.getOrNull()
             if (data != null) {
                 // 顶部初始化
-                // 背景加载
-                Glide.with(this).load(data.portrait).into(image_infoBackGround)
-                // 头像加载
-                Glide.with(this).load(data.portrait).into(image_portrait)
+                // 背景加载 & 头像加载
+                if (data.portrait.isNullOrEmpty()) {
+                    Glide.with(this).load(R.drawable.ic_default).into(image_infoBackGround)
+                    Glide.with(this).load(R.drawable.ic_default).into(image_portrait)
+                } else {
+                    Glide.with(this).load(data.portrait).into(image_infoBackGround)
+                    Glide.with(this).load(data.portrait).into(image_portrait)
+                }
                 // 用户名,昵称,性别，学校显示
                 text_username.text = data.username
                 text_nickname.text = data.nickname
@@ -74,19 +79,25 @@ class UserInfoActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
                 infoList.apply {
 //                    add(getInfoItem("email", data.email, true))
-                    add(getInfoItem("phone", data.phone, true))
-                    add(getInfoItem("birthday", TimeStampUtil.transToString(data.birthday), true))
+                    add(getInfoItem("phone", data.phone, false))
+                    add(
+                        getInfoItem(
+                            "birthday",
+                            TimeStampUtil.transTimeStampToDateString(data.birthday),
+                            false
+                        )
+                    )
                     var realAuthState: String = "未实名"
                     if (data.real_auth != null) {
                         realAuthState = "已实名"
-                        add(getInfoItem("real_auth", realAuthState, true))
+                        add(getInfoItem("real_auth", realAuthState, false))
                         add(getInfoItem("id", data.real_auth.id.toString(), false))
                         add(getInfoItem("name", data.real_auth.name, false))
                         add(getInfoItem("dept", data.real_auth.dept, false))
                         add(getInfoItem("major", data.real_auth.major, false))
                         add(getInfoItem("cls", data.real_auth.cls, false))
                     } else {
-                        add(getInfoItem("real_auth", realAuthState, true))
+                        add(getInfoItem("real_auth", realAuthState, false))
                     }
                 }
                 adapter.notifyDataSetChanged()
@@ -132,8 +143,16 @@ class UserInfoActivity : AppCompatActivity() {
             }
         })
         // 按钮事件监听
+        btn_updateInfo.setOnClickListener {
+            val intent = Intent(this, UserInfoCardActivity::class.java)
+            startActivityForResult(intent, ActivityDao.REQUEST_INFO_CARD)
+            behavior.state = BottomSheetBehavior.STATE_HIDDEN
+        }
         btn_logout.setOnClickListener {
             userInfoViewModel.removeToken()
+            val intent = Intent(ActivityDao.ACTION_REFRESH_TEMPLATE)
+                .putExtra("from", "logout")
+            sendBroadcast(intent)
             finish()
         }
         // 界面刷新显示
@@ -145,7 +164,9 @@ class UserInfoActivity : AppCompatActivity() {
             val token = userInfoViewModel.getToken()
             userInfoViewModel.getUserInfo(token)
         } else {
-            Toast.makeText(this, "请先登录！", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivityForResult(intent, ActivityDao.REQUEST_LOGIN)
         }
     }
 
@@ -172,5 +193,26 @@ class UserInfoActivity : AppCompatActivity() {
             }
         }
         return true
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            ActivityDao.REQUEST_INFO_CARD -> {
+                if (resultCode == ActivityDao.RESULT_OK) {
+                    userInfoViewModel.getUserInfo(userInfoViewModel.getToken())
+                } else if (resultCode == ActivityDao.RESULT_CANCEL) {
+                    Log.d("UserInfoActivity", "请求取消")
+                }
+            }
+            ActivityDao.REQUEST_LOGIN -> {
+                if (resultCode == ActivityDao.RESULT_OK) {
+                    userInfoViewModel.getUserInfo(userInfoViewModel.getToken())
+                    val intent = Intent(ActivityDao.ACTION_REFRESH_TEMPLATE)
+                        .putExtra("from", "login")
+                    sendBroadcast(intent)
+                }
+            }
+        }
     }
 }

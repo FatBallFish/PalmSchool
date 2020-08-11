@@ -4,7 +4,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ServiceCreator {
-//    private const val BASE_URL = "http://10.0.2.2:8000/api/"
+    //    private const val BASE_URL = "http://10.0.2.2:8000/api/"
+//    private const val BASE_URL = "http://192.168.31.146:8000/api/"
     private const val BASE_URL = "http://www.fatballfish.xyz/api/"
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)

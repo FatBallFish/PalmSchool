@@ -32,7 +32,6 @@ class PassLoginFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             phone = it.getString(ARG_PHONE)
-            Toast.makeText(context, "pass get phone:$phone", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -78,7 +77,7 @@ class PassLoginFragment : Fragment() {
             if (username == "" || password == "") {
                 Snackbar.make(
                     btn_passLogin,
-                    "username or password can't be empty",
+                    "用户名密码不可为空",
                     Snackbar.LENGTH_SHORT
                 ).show()
             } else {
@@ -87,7 +86,6 @@ class PassLoginFragment : Fragment() {
         }
         // 切换短信登录事件监听
         text_loginBySms.setOnClickListener {
-            Toast.makeText(context, "OnClickSmsLogin", Toast.LENGTH_SHORT).show()
             val controller = Navigation.findNavController(it)
             val bundle = Bundle()
             phone = edit_username.text.toString()

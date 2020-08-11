@@ -6,11 +6,10 @@ import androidx.lifecycle.ViewModel
 import com.fatballfish.palmschool.logic.Repository
 import com.fatballfish.palmschool.logic.model.lesson.LessonTable
 import com.fatballfish.palmschool.logic.model.lesson.LessonTemplateListRequest
+import com.fatballfish.palmschool.ui.TokenViewModel
 
-class LessonTemplateViewModel : ViewModel() {
+class LessonTemplateViewModel : TokenViewModel() {
     private val requestLiveData = MutableLiveData<LessonTemplateListRequest>()
-    var local_token = ""
-    var current_tid = -1
     val lessonTableList = ArrayList<LessonTable>()
     val personLessonListLiveData =
         Transformations.switchMap(requestLiveData) { personLessonListRequest ->
@@ -18,14 +17,8 @@ class LessonTemplateViewModel : ViewModel() {
         }
 
     fun getLessonTemplateList(token: String, tid: Int) {
-        this.local_token = token
-        this.current_tid = tid
         requestLiveData.value = LessonTemplateListRequest(token, tid)
     }
-
-    fun isTokenSaved() = Repository.isTokenSaved()
-    fun getToken() = Repository.getToken()
-    fun saveToken(token: String) = Repository.saveToken(token)
 
     fun isTemplateIDSaved(token: String) = Repository.isTemplateIDSaved(token)
     fun getTemplateID(token: String) = Repository.getTemplateID(token)

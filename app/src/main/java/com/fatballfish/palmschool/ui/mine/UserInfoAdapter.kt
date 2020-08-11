@@ -1,5 +1,6 @@
 package com.fatballfish.palmschool.ui.mine
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,9 +28,20 @@ class UserInfoAdapter(private val userInfoList: List<UserInfoItem>) :
             val position = holder.adapterPosition
             val userInfo = userInfoList[position]
             if (userInfo.clickable) {
-                Snackbar.make(view, "can be clicked", Snackbar.LENGTH_SHORT).show()
+                when(userInfo.key){
+                    "phone"->{}
+                    "birthday"->{}
+                    "real_auth"->{}
+                    "id"->{}
+                    "name"->{}
+                    "dept"->{}
+                    "major"->{}
+                    "cls"->{}
+                }
+                val intent = Intent()
+//                Snackbar.make(view, "can be clicked", Snackbar.LENGTH_SHORT).show()
             } else {
-                Snackbar.make(view, "can't be clicked", Snackbar.LENGTH_SHORT).show()
+//                Snackbar.make(view, "can't be clicked", Snackbar.LENGTH_SHORT).show()
             }
             // 单击事件处理
         }

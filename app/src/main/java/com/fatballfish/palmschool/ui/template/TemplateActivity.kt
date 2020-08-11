@@ -15,6 +15,7 @@ class TemplateActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
+            setTitle("选择课表模版")
         }
 
     }

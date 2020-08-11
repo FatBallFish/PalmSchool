@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.fatballfish.palmschool"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -58,5 +58,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.0.1'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'com.nightonke:boommenu:2.1.1'
+    implementation 'com.yuyh.imgsel:library:2.0.7'
+    implementation 'com.github.LuckSiege.PictureSelector:picture_library:v2.2.8'
 
 }

@@ -1,4 +1,4 @@
-package com.fatballfish.palmschool.logic.model.Template
+package com.fatballfish.palmschool.logic.model.template
 
 import com.google.gson.annotations.SerializedName
 

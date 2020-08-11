@@ -3,6 +3,7 @@ package com.fatballfish.palmschool.logic.model
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import android.widget.Toast
 
 class PalmSchoolDataBaseHelper(val context: Context, name: String, version: Int) :
@@ -19,7 +20,8 @@ class PalmSchoolDataBaseHelper(val context: Context, name: String, version: Int)
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL(createTokenUser)
         db?.execSQL(createConfig)
-        Toast.makeText(context, "create succeeded", Toast.LENGTH_SHORT).show()
+        Log.d("SQLiteDatabase", "create succeeded")
+//        Toast.makeText(context, "create succeeded", Toast.LENGTH_SHORT).show()
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {

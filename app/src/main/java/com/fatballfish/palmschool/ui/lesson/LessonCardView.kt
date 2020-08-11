@@ -54,12 +54,8 @@ class LessonCardView : MaterialCardView {
     fun init(context: Context) {
 
         view = LayoutInflater.from(context).inflate(R.layout.lesson_info, this, true)
-//        removeAllViews()
-        // 获取子控件
         relativeLayout = layout_lessonInfo
         textView = text_lessonInfo
-
-//        this.addView(view)
         setCardBackgroundColor(
             Color.argb(
                 255,
@@ -68,14 +64,6 @@ class LessonCardView : MaterialCardView {
                 (0..255).random()
             )
         )
-        // ===== 属性读取 ======
-//        val mattrs = context.obtainStyledAttributes(attrs, R.styleable.LessonCardView)
-//        startClass = mattrs.getInt(R.styleable.LessonCardView_startClass, 0)
-//        stopClass = mattrs.getInt(R.styleable.LessonCardView_stopClass, 0)
-//        lessonWeek = mattrs.getInt(R.styleable.LessonCardView_lessonWeek, 0)
-//        lessonInfo = mattrs.getString(R.styleable.LessonCardView_lessonInfo) ?: ""
-//        Toast.makeText(context, lessonInfo, Toast.LENGTH_SHORT).show()
-//        mattrs.recycle()
         setOnClickListener {
             Toast.makeText(context, lessonInfo, Toast.LENGTH_SHORT).show()
             Log.d("Lesson", "layout：${relativeLayout.width}:${relativeLayout.height}")
@@ -84,14 +72,11 @@ class LessonCardView : MaterialCardView {
     }
 
     fun init(context: Context, attrs: AttributeSet?) {
-
         view = LayoutInflater.from(context).inflate(R.layout.lesson_info, this, true)
-//        removeAllViews()
         // 获取子控件
         relativeLayout = layout_lessonInfo
         textView = text_lessonInfo
 
-//        this.addView(view)
         setCardBackgroundColor(
             Color.argb(
                 255,
@@ -115,19 +100,9 @@ class LessonCardView : MaterialCardView {
     }
 
     fun initSub() {
-//        relativeLayout = RelativeLayout(context)
-//        textView = TextView(context)
-//        relativeLayout.addView(textView)
-//        addView(relativeLayout)
-//        relativeLayout.layoutParams =
-//            RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         relativeLayout.layout(0, 0, width, height)
-//        textView.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT)
         textView.layout(0, 0, width, height)
-//        relativeLayout.gravity = Gravity.CENTER
         textView.text = lessonInfo
-//        textView.gravity = Gravity.CENTER
-
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {

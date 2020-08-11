@@ -39,7 +39,6 @@ class SmsLoginFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             phone = it.getString(ARG_PHONE)
-            Toast.makeText(context, "sms get phone:$phone", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -93,7 +92,7 @@ class SmsLoginFragment : Fragment() {
                     result.exceptionOrNull()?.printStackTrace()
                     Snackbar.make(
                         btn_getSmsCode,
-                        "获取失败|${result.exceptionOrNull()?.message}",
+                        "验证码获取失败|${result.exceptionOrNull()?.message}",
                         Snackbar.LENGTH_SHORT
                     ).show()
                 }
@@ -122,7 +121,7 @@ class SmsLoginFragment : Fragment() {
             if (phone == "" || phone == null || smsCode == "" || smsCode == null) {
                 Snackbar.make(
                     btn_smsLogin,
-                    "phone or smsCode can't be empty",
+                    "手机号或验证码不可为空",
                     Snackbar.LENGTH_SHORT
                 ).show()
             } else {

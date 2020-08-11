@@ -20,9 +20,9 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_lessons.*
 
 class LessonFragment : Fragment() {
-    lateinit var receiver: TemplateRefreshReceiver
     val lessonTemplateViewModel by lazy { ViewModelProvider(this)[LessonTemplateViewModel::class.java] }
     val templateViewModel by lazy { ViewModelProvider(this)[TemplateListViewModel::class.java] }
+    val currentTemplateViewModel by lazy { ViewModelProvider(this)[CurrentTemplateViewModel::class.java] }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,6 +33,7 @@ class LessonFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        // viewModel
         templateViewModel.templateListLiveData.observe(viewLifecycleOwner, Observer { result ->
             val data = result.getOrNull()
             if (data != null) {
@@ -42,18 +43,9 @@ class LessonFragment : Fragment() {
                 var tid = templateViewModel.getTemplateID(token)
                 if (templateViewModel.templateList.size == 0) {
                     Log.d("Template", "模板列表元素数为0")
-                    Toast.makeText(context, "未找到课程表,请先添加", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "暂无可选择的课表模版", Toast.LENGTH_SHORT).show()
                     layout_swipeRefresh.isRefreshing = false
                     return@Observer
-                } else if (tid == -1 && templateViewModel.templateList.size > 0) {
-                    Log.d("Template", "检测到无初始tid，且返回数据存在，默认使用第一个返回列表")
-                    tid = templateViewModel.templateList[0].tid
-                    Log.d("Template", "默认第一个列表tid:$tid")
-                    val save_result = templateViewModel.saveTemplateID(token, tid)
-                    Log.d("Temlate", "tid保存结果：$save_result")
-                    lessonTemplateViewModel.current_tid = tid
-                } else if (tid != -1) {
-                    lessonTemplateViewModel.current_tid = tid
                 }
                 refreshLessonTemplate()
             } else {
@@ -70,11 +62,6 @@ class LessonFragment : Fragment() {
             Observer { result ->
                 val data = result.getOrNull()
                 if (data != null) {
-                    val save_ret = lessonTemplateViewModel.saveTemplateID(
-                        lessonTemplateViewModel.getToken(),
-                        lessonTemplateViewModel.current_tid
-                    )
-                    Log.d("Template", "leesonTemplateViewModel 保存tid结果:$save_ret")
                     lessonTemplateViewModel.lessonTableList.clear()
                     lessonTemplateViewModel.lessonTableList.addAll(data.list)
                     // 递归填充课程表
@@ -104,13 +91,53 @@ class LessonFragment : Fragment() {
                 }
                 layout_swipeRefresh.isRefreshing = false
             })
+        currentTemplateViewModel.getCurrentTemplateLiveData.observe(
+            viewLifecycleOwner,
+            Observer { result ->
+                val data = result.getOrNull()
+                if (data != null) {
+                    val tid = data.tid
+                    if (tid != -1) {
+                        Log.d("LessonFragment", "存在默认课表tid:$tid")
+                        val save_result =
+                            templateViewModel.saveTemplateID(templateViewModel.getToken(), tid)
+                        Log.d("LessonFragment", "tid保存结果：$save_result")
+                        refreshLessonTemplate()
+                    } else {
+                        Toast.makeText(context, "请选择一个课表模版", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(
+                        context,
+                        "用户当前课表模版信息获取失败|${result.exceptionOrNull()?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                layout_swipeRefresh.isRefreshing = false
+            })
+        currentTemplateViewModel.updateCurrentTemplateLiveData.observe(
+            viewLifecycleOwner,
+            Observer { result ->
+                val data = result.getOrNull()
+                if (data != null) {
+                    templateViewModel.saveTemplateID(templateViewModel.getToken(), data.tid)
+                    refreshLessonTemplate()
+                    Toast.makeText(context, "模版切换成功", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(
+                        context,
+                        "模版切换失败|${result.exceptionOrNull()?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                layout_swipeRefresh.isRefreshing = false
+            })
         if (activity is MainActivity) {
             // 定义广播
             val intentFilter = IntentFilter()
             intentFilter.addAction(ActivityDao.ACTION_REFRESH_TEMPLATE)
-            receiver = TemplateRefreshReceiver()
-            activity?.registerReceiver(receiver, intentFilter)
-            Toast.makeText(context, "由主窗口载入", Toast.LENGTH_SHORT).show()
+            (activity as MainActivity).receiver = TemplateRefreshReceiver()
+            activity?.registerReceiver((activity as MainActivity).receiver, intentFilter)
         }
     }
 
@@ -119,31 +146,47 @@ class LessonFragment : Fragment() {
         // 刷新容器
         layout_swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
         layout_swipeRefresh.setOnRefreshListener {
-            getTemplateList()
+            getCurrentTemplate()
+//            getTemplateList()
         }
         initUI()
     }
 
     private fun initUI() {
-        if (lessonTemplateViewModel.isTokenSaved()) {
-            getTemplateList()
+        if (currentTemplateViewModel.isTokenSaved()) {
+            getCurrentTemplate()
+//            getTemplateList()
         }
+    }
+
+    private fun insertTokens(token: String, username: String) {
+        val db = PalmSchoolApplication.db
+        val cursor = db.rawQuery("SELECT * FROM tokens WHERE token = ?", arrayOf(token))
+        Log.d("SQL", "insertTokens:count:${cursor.count}")
+        if (cursor.count == 0) {
+            val tokens = ContentValues().apply {
+                put("token", token)
+                put("username", username)
+            }
+            val ret_id = db.insert(PalmSchoolApplication.TABLE_TOKEN, null, tokens)
+//            Toast.makeText(this, "insert ret_id:$ret_id", Toast.LENGTH_SHORT).show()
+            Log.d("SQL", "insert ret_id:$ret_id")
+        }
+        cursor.close()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Toast.makeText(context, "Fragment 结果返回", Toast.LENGTH_SHORT).show()
         when (requestCode) {
             ActivityDao.REQUEST_LOGIN -> {
                 if (resultCode == ActivityDao.RESULT_OK) {
+                    val username = data?.getStringExtra("phone") ?: ""
                     val token = data?.getStringExtra("token") ?: ""
                     val loginType = data?.getStringExtra("login_type")
-                    Toast.makeText(context, "$token|$loginType", Toast.LENGTH_SHORT).show()
+                    insertTokens(token, username)
                     lessonTemplateViewModel.saveToken(token)
-//                    if (lessonTemplateViewModel.isTemplateIDSaved(token)) {
-//                        val template_id = lessonTemplateViewModel.getTemplateID(token)
-//                    }
-                    getTemplateList()
+                    getCurrentTemplate()
+//                    getTemplateList()
                 } else if (resultCode == ActivityDao.RESULT_CANCEL) {
                     Toast.makeText(context, "取消登录", Toast.LENGTH_SHORT).show()
                 }
@@ -182,15 +225,46 @@ class LessonFragment : Fragment() {
         }
     }
 
+    private fun getCurrentTemplate() {
+        layout_swipeRefresh.isRefreshing = true
+        if (currentTemplateViewModel.isTokenSaved()) {
+            Log.d("LessonFragment", "获取用户当前课表模版id：token存在")
+            currentTemplateViewModel.getCurrentTemplateId()
+        } else {
+            Log.d("LessonFragment", "获取用户当前课表模版id：token不存在")
+            layout_swipeRefresh.isRefreshing = false
+            Toast.makeText(context, "请先登录", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, LoginActivity::class.java)
+            startActivityForResult(intent, ActivityDao.REQUEST_LOGIN)
+        }
+    }
+
+    private fun clearCls() {
+        lessonTemplateViewModel.lessonTableList.clear()
+        layout_lessonWeek.removeAllViews()
+    }
+
     inner class TemplateRefreshReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            Toast.makeText(activity, "收到通知", Toast.LENGTH_SHORT).show()
+            Log.d("BroadcastReceiver", "收到通知")
+            val from = intent?.getStringExtra("from")
             val tid = intent?.getIntExtra("tid", -1) ?: -1
             Log.d("Template", "broadcast tid:$tid")
-            if (tid != -1) {
-                templateViewModel.saveTemplateID(templateViewModel.getToken(), tid)
+            when (from) {
+                "login" -> {
+                    clearCls()
+                    getCurrentTemplate()
+                }
+                "template" -> {
+                    if (tid != -1) {
+                        currentTemplateViewModel.updateCurrentTemplateId(tid)
+                    }
+                }
+                "logout" -> {
+                    clearCls()
+                }
             }
-            getTemplateList()
+
         }
     }
 }

@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.nav_header.*
 import java.lang.StringBuilder
 
 class MainActivity : AppCompatActivity() {
+    lateinit var receiver: LessonFragment.TemplateRefreshReceiver
     val userInfoViewModel by lazy { ViewModelProvider(this)[UserInfoViewModel::class.java] }
     val boomButtonInfoList = ArrayList<BoomButtonInfo>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +44,7 @@ class MainActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_menu)
         }
         // 初始化数据库
+        PalmSchoolApplication.db
         // viewModel
         userInfoViewModel.userInfoLiveData.observe(this, Observer { result ->
             val data = result.getOrNull()
@@ -101,31 +103,31 @@ class MainActivity : AppCompatActivity() {
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.navLessons -> {
-                    Toast.makeText(this, "点击了课程页面", Toast.LENGTH_SHORT).show()
+
                 }
                 R.id.navTasks -> {
-                    Toast.makeText(this, "点击了任务页面", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "敬请期待", Toast.LENGTH_SHORT).show()
                 }
                 R.id.navcommunication -> {
-                    Toast.makeText(this, "点击了发现页面", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "敬请期待", Toast.LENGTH_SHORT).show()
                 }
                 R.id.navMine -> {
-                    val intent = Intent(this, UserInfoActivity::class.java)
-                    startActivityForResult(intent, ActivityDao.REQUEST_USER_INFO)
+                    if (!userInfoViewModel.isTokenSaved()) {
+                        Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, LoginActivity::class.java)
+                        startActivityForResult(intent, ActivityDao.REQUEST_LOGIN)
+                    } else {
+                        val intent = Intent(this, UserInfoActivity::class.java)
+                        startActivityForResult(intent, ActivityDao.REQUEST_USER_INFO)
+                    }
                 }
             }
             view_drawerLayout.closeDrawers()
             true
         }
-
-//        // 设置浮动按钮
-//        fab.setOnClickListener {
-//            Toast.makeText(this, "浮动按钮被单击", Toast.LENGTH_SHORT).show()
-//            Snackbar.make(it, "浮动按钮被单击", Snackbar.LENGTH_SHORT).show()
-//        }
         // 设置bmb按钮
         boomButtonInfoList.add(BoomButtonInfo("添加课程", R.drawable.ic_plus))
-        boomButtonInfoList.add(BoomButtonInfo("替换模版", R.drawable.ic_template))
+        boomButtonInfoList.add(BoomButtonInfo("切换模版", R.drawable.ic_template))
         Log.d("MainActivity", "bmb num:${bmb.piecePlaceEnum.pieceNumber()}")
         for (i in 0 until bmb.piecePlaceEnum.pieceNumber()) {
             Log.d("MainActivity", "bmb placeEnum index:${i}")
@@ -133,16 +135,20 @@ class MainActivity : AppCompatActivity() {
             val builder = TextOutsideCircleButton.Builder()
                 .listener(OnBMClickListener { index ->
                     when (boomButtonInfoList[index].text) {
-                        "替换模版" -> {
-                            val intent = Intent(this, TemplateActivity::class.java)
-                            startActivityForResult(intent, ActivityDao.REQUEST_TEMPLATE_SEARCH)
+                        "切换模版" -> {
+                            if (!userInfoViewModel.isTokenSaved()) {
+                                Toast.makeText(this, "请先登录", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this, LoginActivity::class.java)
+                                startActivityForResult(intent, ActivityDao.REQUEST_LOGIN)
+                            } else {
+                                val intent = Intent(this, TemplateActivity::class.java)
+                                startActivityForResult(intent, ActivityDao.REQUEST_TEMPLATE_SEARCH)
+                            }
+                        }
+                        else -> {
+                            Toast.makeText(this, "敬请期待", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    Toast.makeText(
-                        this,
-                        "Clicked ${boomButtonInfoList[index].text}",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 })
                 .normalImageRes(boomButtonInfo.image)
                 .normalText(boomButtonInfo.text)
@@ -162,22 +168,22 @@ class MainActivity : AppCompatActivity() {
     private fun insertTokens(token: String, username: String) {
         val db = PalmSchoolApplication.db
         val cursor = db.rawQuery("SELECT * FROM tokens WHERE token = ?", arrayOf(token))
-        Log.d("Template", "insert count:${cursor.count}")
+        Log.d("SQL", "insertTokens:count:${cursor.count}")
         if (cursor.count == 0) {
             val tokens = ContentValues().apply {
                 put("token", token)
                 put("username", username)
             }
             val ret_id = db.insert(PalmSchoolApplication.TABLE_TOKEN, null, tokens)
-            Toast.makeText(this, "insert ret_id:$ret_id", Toast.LENGTH_SHORT).show()
-            Log.d("Template", "insert ret_id:$ret_id")
+//            Toast.makeText(this, "insert ret_id:$ret_id", Toast.LENGTH_SHORT).show()
+            Log.d("SQL", "insert ret_id:$ret_id")
         }
         cursor.close()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Toast.makeText(this, "MainActivity 结果返回", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this, "MainActivity 结果返回", Toast.LENGTH_SHORT).show()
         when (requestCode) {
             ActivityDao.REQUEST_LOGIN -> {
                 if (resultCode == ActivityDao.RESULT_OK) {
@@ -185,19 +191,17 @@ class MainActivity : AppCompatActivity() {
                     val token = data?.getStringExtra("token") ?: ""
                     val loginType = data?.getStringExtra("login_type") ?: ""
                     // 写入数据库
+                    Log.d("MainActivity", "登录成功，准备写入token:$token")
                     insertTokens(token, username)
-                    Toast.makeText(this, "$token|$loginType", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "$token|$loginType", Toast.LENGTH_SHORT).show()
                     userInfoViewModel.saveToken(token)
                     userInfoViewModel.getUserInfo(token)
                     val tid = intent.getIntExtra("tid", -1)
 
-                    val intent = Intent(ActivityDao.ACTION_REFRESH_TEMPLATE).putExtra("tid", tid)
+                    val intent = Intent(ActivityDao.ACTION_REFRESH_TEMPLATE)
+                        .putExtra("tid", tid)
+                        .putExtra("from", "login")
                     sendBroadcast(intent)
-//                    // 重载 课程页面，测试不可行
-//                    layout_HomeFragment.removeAllViews()
-//                    val lessonFragment = LayoutInflater.from(this)
-//                        .inflate(R.layout.fragment_lessons, layout_HomeFragment, false)
-//                    layout_HomeFragment.addView(lessonFragment)
                 } else if (resultCode == ActivityDao.RESULT_CANCEL) {
                     Toast.makeText(this, "取消登录", Toast.LENGTH_SHORT).show()
                 }
@@ -219,12 +223,19 @@ class MainActivity : AppCompatActivity() {
                 if (resultCode == ActivityDao.RESULT_OK) {
                     val tid = data?.getIntExtra("tid", -1) ?: -1
                     Log.d("Template", "获得返回时tid:${tid}")
-                    val intent = Intent(ActivityDao.ACTION_REFRESH_TEMPLATE).putExtra("tid", tid)
+                    val intent = Intent(ActivityDao.ACTION_REFRESH_TEMPLATE)
+                        .putExtra("tid", tid)
+                        .putExtra("from", "template")
                     sendBroadcast(intent)
-                    Toast.makeText(this, "发起通知", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "发起通知", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(receiver)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -237,13 +248,13 @@ class MainActivity : AppCompatActivity() {
         // 监听顶部菜单点击事件
         when (item.itemId) {
             R.id.toolbar_addLesson -> {
-                Toast.makeText(this, "点击了添加课程", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "功能暂未开发", Toast.LENGTH_SHORT).show()
             }
             R.id.toolbar_editLessons -> {
-                Toast.makeText(this, "点击了编辑课程", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "功能暂未开发", Toast.LENGTH_SHORT).show()
             }
             R.id.toolbar_deleteLessons -> {
-                Toast.makeText(this, "点击了删除课程", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "功能暂未开发", Toast.LENGTH_SHORT).show()
             }
             android.R.id.home -> {
                 view_drawerLayout.openDrawer(GravityCompat.START, true)

@@ -2,18 +2,15 @@ package com.fatballfish.palmschool.ui.template
 
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.fatballfish.palmschool.R
 import com.fatballfish.palmschool.logic.dao.ActivityDao
-import com.fatballfish.palmschool.logic.model.Template.Template
+import com.fatballfish.palmschool.logic.model.template.Template
 import com.fatballfish.palmschool.logic.util.TimeStampUtil
 
 class TemplateAdapter(
@@ -35,18 +32,11 @@ class TemplateAdapter(
         holder.itemView.setOnClickListener {
             val position = holder.adapterPosition
             val template = templateList[position]
-            Toast.makeText(parent.context, "${template.name} be clicked", Toast.LENGTH_SHORT).show()
             // activity 判断
             val activity = fragment.activity
             if (activity is TemplateActivity) {
-                println("设置返回时tid:${template.tid}")
-                val intent = Intent()
-                    .putExtra("tid", template.tid)
-                activity.setResult(ActivityDao.RESULT_OK, intent)
-                activity.finish()
+                fragment.currentTemplateViewModel.updateCurrentTemplateId(template.tid)
             }
-
-
         }
         return holder
     }
@@ -59,7 +49,8 @@ class TemplateAdapter(
         holder.text_content.text = template.content
         holder.text_count.text = "应用次数：${template.used}"
         holder.text_submiter.text = "上传者：${template.submiter}"
-        holder.text_submit_time.text = "上传时间：${TimeStampUtil.transToString(template.addTime)}"
+        holder.text_submit_time.text =
+            "上传时间：${TimeStampUtil.transTimeStampToDateString(template.addTime)}"
         if (template.public) {
             holder.text_public.text = "公开"
             holder.text_public.setTextColor(Color.parseColor("#00ff00")) // 绿色

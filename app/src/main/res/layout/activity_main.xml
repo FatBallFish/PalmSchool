@@ -42,6 +42,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
             app:bmb_buttonEnum="textOutsideCircle"
             app:bmb_buttonPlaceEnum="buttonPlace_sc_2_1"
             app:bmb_piecePlaceEnum="piecePlace_dot_2_1" />

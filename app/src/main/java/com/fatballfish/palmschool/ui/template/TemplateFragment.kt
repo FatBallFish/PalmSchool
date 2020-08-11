@@ -1,5 +1,6 @@
 package com.fatballfish.palmschool.ui.template
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import androidx.fragment.app.Fragment
@@ -12,6 +13,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.fatballfish.palmschool.R
+import com.fatballfish.palmschool.logic.dao.ActivityDao
+import com.fatballfish.palmschool.ui.lesson.CurrentTemplateViewModel
 import com.fatballfish.palmschool.ui.lesson.TemplateListViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_template.*
@@ -26,6 +29,7 @@ private const val ARG_PARAM1 = "token"
  */
 class TemplateFragment : Fragment() {
     private val templateViewModel by lazy { ViewModelProvider(this)[TemplateListViewModel::class.java] }
+    val currentTemplateViewModel by lazy { ViewModelProvider(this)[CurrentTemplateViewModel::class.java] }
     private lateinit var adapter: TemplateAdapter
     private var token: String? = null
 
@@ -61,6 +65,8 @@ class TemplateFragment : Fragment() {
             if (content.isNotEmpty()) {
                 val map = mapOf("key" to content, "mode" to "all")
                 templateViewModel.getTemplateList(token!!, map)
+            } else {
+                templateViewModel.getTemplateList(token!!, mapOf("key" to "", "mode" to "all"))
             }
         }
         templateViewModel.templateListLiveData.observe(viewLifecycleOwner, Observer { result ->
@@ -80,6 +86,30 @@ class TemplateFragment : Fragment() {
                 ).show()
             }
         })
+        currentTemplateViewModel.updateCurrentTemplateLiveData.observe(
+            viewLifecycleOwner,
+            Observer { result ->
+                val data = result.getOrNull()
+                if (data != null) {
+                    println("设置返回时tid:${data.tid}")
+                    templateViewModel.saveTemplateID(templateViewModel.getToken(), data.tid)
+                    val intent = Intent()
+                        .putExtra("tid", data.tid)
+                    activity?.setResult(ActivityDao.RESULT_OK, intent)
+                    activity?.finish()
+                } else {
+                    Toast.makeText(
+                        context,
+                        "模版切换失败|${result.exceptionOrNull()?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+        initUI()
+    }
+
+    private fun initUI() {
+        templateViewModel.getTemplateList(token!!, mapOf("key" to "", "mode" to "all"))
     }
 
     companion object {

@@ -2,6 +2,7 @@ package com.fatballfish.palmschool.logic.dao
 
 import android.content.ContentValues
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.core.content.edit
 import com.fatballfish.palmschool.PalmSchoolApplication
@@ -16,6 +17,7 @@ object TemplateDao {
         )
         if (!cursor.moveToFirst()) {
             // token记录不存在
+            Log.d("SQL", "saveTemplateID:token不存在")
             return false
         }
         val username = cursor.getString(cursor.getColumnIndex("username"))
@@ -24,7 +26,13 @@ object TemplateDao {
         if (cursor2.moveToFirst()) {
             val values = ContentValues()
             values.put("tid", tid)
-            db.update(PalmSchoolApplication.TABLE_CONFIG, values, "username = ?", arrayOf(username))
+            val affected = db.update(
+                PalmSchoolApplication.TABLE_CONFIG,
+                values,
+                "username = ?",
+                arrayOf(username)
+            )
+            Log.d("SQL", "saveTemplateID:affected:$affected")
         } else {
             val config = ContentValues().apply {
                 put("username", username)

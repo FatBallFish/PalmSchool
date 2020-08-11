@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="5dp"
-                    android:layout_weight="7"
+                    android:layout_weight="5"
                     android:hint="@string/hint_login_smsCode"
                     android:inputType="number"
                     android:maxLength="5"
@@ -80,7 +80,7 @@
                     android:id="@+id/btn_getSmsCode"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
+                    android:layout_weight="5"
                     android:text="@string/login_getsms_btn" />
 
             </LinearLayout>
