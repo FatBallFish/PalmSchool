@@ -1,19 +1,21 @@
 package com.fatballfish.palmschool.ui.login
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.fatballfish.palmschool.logic.Repository
 import com.fatballfish.palmschool.logic.model.user.PassLoginRequest
 import com.fatballfish.palmschool.logic.model.user.SmsLoginRequest
+import com.fatballfish.palmschool.ui.TokenViewModel
 
-class SmsLoginViewModel : ViewModel() {
+class SmsLoginViewModel @ViewModelInject constructor(val repository: Repository) : ViewModel() {
     private val smsLiveData = MutableLiveData<SmsLoginRequest>()
     var username = ""
     var hash = ""
     var enduring = false
     val smsLoginLiveData = Transformations.switchMap(smsLiveData) { smsLoginRequest ->
-        Repository.smsLogin(smsLoginRequest)
+        repository.smsLogin(smsLoginRequest)
     }
 
     fun smsLogin(username: String, hash: String, enduring: Boolean = false) {
@@ -28,18 +30,18 @@ class SmsLoginViewModel : ViewModel() {
             )
     }
 
-    fun saveToken(token: String) = Repository.saveToken(token)
-    fun isTokenSaved() = Repository.isTokenSaved()
-    fun getToken() = Repository.getToken()
+    fun saveToken(token: String) = repository.saveToken(token)
+    fun isTokenSaved() = repository.isTokenSaved()
+    fun getToken() = repository.getToken()
 }
 
-class PassLoginViewModel : ViewModel() {
+class PassLoginViewModel @ViewModelInject constructor(repository: Repository) : TokenViewModel(repository) {
     private val smsLiveData = MutableLiveData<PassLoginRequest>()
     var username = ""
     var password = ""
     var enduring = false
     val passLoginLiveData = Transformations.switchMap(smsLiveData) { passLoginRequest ->
-        Repository.passLogin(passLoginRequest)
+        repository.passLogin(passLoginRequest)
     }
 
     fun passLogin(username: String, password: String, enduring: Boolean = false) {
@@ -53,8 +55,4 @@ class PassLoginViewModel : ViewModel() {
                 enduring
             )
     }
-
-    fun saveToken(token: String) = Repository.saveToken(token)
-    fun isTokenSaved() = Repository.isTokenSaved()
-    fun getToken() = Repository.getToken()
 }

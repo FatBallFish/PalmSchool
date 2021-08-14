@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import com.fatballfish.palmschool.R
 import com.fatballfish.palmschool.logic.dao.ActivityDao
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_template.*
 
+@AndroidEntryPoint
 class TemplateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -15,6 +15,7 @@ import com.fatballfish.palmschool.logic.dao.ActivityDao
 import com.fatballfish.palmschool.logic.model.realAuth.RealAuthUpdateRequest
 import com.fatballfish.palmschool.logic.model.user.UserInfoUpdateRequest
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_normal_user_info_edit.*
 import java.util.regex.Pattern
 
@@ -27,6 +28,7 @@ private const val ARG_PARAM2 = "value"
  * Use the [NormalUserInfoEditFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class NormalUserInfoEditFragment : Fragment() {
     private var key: String? = null
     private var value: String? = null

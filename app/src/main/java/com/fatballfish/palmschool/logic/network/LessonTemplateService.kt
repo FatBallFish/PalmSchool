@@ -1,5 +1,6 @@
-package com.fatballfish.palmschool.logic.model.lesson
+package com.fatballfish.palmschool.logic.network
 
+import com.fatballfish.palmschool.logic.model.lesson.LessonTemplateListResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -11,6 +12,4 @@ interface LessonTemplateService {
         @Query("token") token: String,
         @Query("tid") tid: Int
     ): Call<LessonTemplateListResponse>
-
-
 }

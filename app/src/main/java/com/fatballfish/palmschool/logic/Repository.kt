@@ -12,12 +12,15 @@ import com.fatballfish.palmschool.logic.network.PalmSchoolNetwork
 import kotlinx.coroutines.Dispatchers
 import java.lang.Exception
 import java.lang.RuntimeException
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 
-object Repository {
+@Singleton
+class Repository @Inject constructor(val network: PalmSchoolNetwork) {
     // 短信登录
     fun smsLogin(smsLoginRequest: SmsLoginRequest) = fire(Dispatchers.IO) {
-        val userLoginResponse = PalmSchoolNetwork.smsLogin(smsLoginRequest)
+        val userLoginResponse = network.smsLogin(smsLoginRequest)
         if (userLoginResponse.status == 0) {
             val data = userLoginResponse.data
             Result.success(data)
@@ -28,7 +31,7 @@ object Repository {
 
     // 密码登录
     fun passLogin(passLoginRequest: PassLoginRequest) = fire(Dispatchers.IO) {
-        val userLoginResponse = PalmSchoolNetwork.passLogin(passLoginRequest)
+        val userLoginResponse = network.passLogin(passLoginRequest)
         if (userLoginResponse.status == 0) {
             val data = userLoginResponse.data
             Result.success(data)
@@ -39,7 +42,7 @@ object Repository {
 
     // 短信验证码创建
     fun smsCaptchaCreate(smsCaptchaCreateRequest: SmsCaptchaCreateRequest) = fire(Dispatchers.IO) {
-        val smsCaptchaCreateResponse = PalmSchoolNetwork.createSmsCaptcha(smsCaptchaCreateRequest)
+        val smsCaptchaCreateResponse = network.createSmsCaptcha(smsCaptchaCreateRequest)
         if (smsCaptchaCreateResponse.status == 0) {
             val data = smsCaptchaCreateResponse.data
             Result.success(data)
@@ -52,7 +55,7 @@ object Repository {
     fun smsCaptchaValidata(smsCaptchaValidateRequest: SmsCaptchaValidateRequest) =
         fire(Dispatchers.IO) {
             val smsCaptchaValidateResponse =
-                PalmSchoolNetwork.validateSmsCaptcha(smsCaptchaValidateRequest)
+                network.validateSmsCaptcha(smsCaptchaValidateRequest)
             if (smsCaptchaValidateResponse.status == 0) {
                 val data = smsCaptchaValidateResponse.data
                 Result.success(data)
@@ -65,7 +68,7 @@ object Repository {
     fun getLessonTemplateList(lessonTemplateListRequest: LessonTemplateListRequest) =
         fire(Dispatchers.IO) {
             val lessonListResponse =
-                PalmSchoolNetwork.getLessonTemplateList(lessonTemplateListRequest)
+                network.getLessonTemplateList(lessonTemplateListRequest)
             if (lessonListResponse.status == 0) {
                 val data = lessonListResponse.data
                 Result.success(data)
@@ -76,7 +79,7 @@ object Repository {
 
     // 模版列表获取
     fun getTemplateList(token: String, map: Map<String, String>) = fire(Dispatchers.IO) {
-        val templateListResponse = PalmSchoolNetwork.getTemplateList(token, map)
+        val templateListResponse = network.getTemplateList(token, map)
         if (templateListResponse.status == 0) {
             val data = templateListResponse.data
             Result.success(data)
@@ -87,7 +90,7 @@ object Repository {
 
     // 获取用户当前所用模版id
     fun getCurrentTemplateId(token: String) = fire(Dispatchers.IO) {
-        val currentTemplateResponse = PalmSchoolNetwork.getCurrentTemplateId(token)
+        val currentTemplateResponse = network.getCurrentTemplateId(token)
         if (currentTemplateResponse.status == 0) {
             val data = currentTemplateResponse.data
             Result.success(data)
@@ -100,7 +103,7 @@ object Repository {
     fun updateCurrentTemplateId(token: String, tid: CurrentTemplateUpdateRequest) =
         fire(Dispatchers.IO) {
             val currentTemplateUpdateResponse =
-                PalmSchoolNetwork.updateCurrentTemplateId(token, tid)
+                network.updateCurrentTemplateId(token, tid)
             if (currentTemplateUpdateResponse.status == 0) {
                 val data = currentTemplateUpdateResponse.data
                 Result.success(data)
@@ -111,7 +114,7 @@ object Repository {
 
     // 用户信息获取
     fun getUserInfo(token: String) = fire(Dispatchers.IO) {
-        val userInfoResponse = PalmSchoolNetwork.getUserInfo(token)
+        val userInfoResponse = network.getUserInfo(token)
         if (userInfoResponse.status == 0) {
             val data = userInfoResponse.data
             Result.success(data)
@@ -122,7 +125,7 @@ object Repository {
 
     // 用户信息更新
     fun updateUserInfo(token: String, data: UserInfoUpdateRequest) = fire(Dispatchers.IO) {
-        val userInfoUpdateResponse = PalmSchoolNetwork.updateUserInfo(token, data)
+        val userInfoUpdateResponse = network.updateUserInfo(token, data)
         if (userInfoUpdateResponse.status == 0) {
             val data = userInfoUpdateResponse.data
             Result.success(data)
@@ -133,7 +136,7 @@ object Repository {
 
     // 头像上传
     fun uploadPortrait(token: String, data: PortraitUploadRequest) = fire(Dispatchers.IO) {
-        val portraitUploadResponse = PalmSchoolNetwork.uploadPortrait(token, data)
+        val portraitUploadResponse = network.uploadPortrait(token, data)
         if (portraitUploadResponse.status == 0) {
             val data = portraitUploadResponse.data
             Result.success(data)
@@ -144,7 +147,7 @@ object Repository {
 
     // 实名信息更新
     fun updateRealAuth(token: String, data: RealAuthUpdateRequest) = fire(Dispatchers.IO) {
-        val realAuthUpdateResponse = PalmSchoolNetwork.updateRealAuth(token, data)
+        val realAuthUpdateResponse = network.updateRealAuth(token, data)
         if (realAuthUpdateResponse.status == 0) {
             val data = realAuthUpdateResponse.data
             Result.success(data)
@@ -155,7 +158,7 @@ object Repository {
 
     // 实名信息创建
     fun createRealAuth(token: String, data: RealAuthCreateRequest) = fire(Dispatchers.IO) {
-        val realAuthCreateResponse = PalmSchoolNetwork.createRealAuth(token, data)
+        val realAuthCreateResponse = network.createRealAuth(token, data)
         if (realAuthCreateResponse.status == 0) {
             val data = realAuthCreateResponse.data
             Result.success(data)
@@ -166,7 +169,7 @@ object Repository {
 
     // 获取学校列表
     fun getSchoolList(token: String, map: Map<String, String>) = fire(Dispatchers.IO) {
-        val schoolListResponse = PalmSchoolNetwork.getSchoolList(token, map)
+        val schoolListResponse = network.getSchoolList(token, map)
         if (schoolListResponse.status == 0) {
             val data = schoolListResponse.data
             Result.success(data)

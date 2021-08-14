@@ -18,6 +18,7 @@ import com.fatballfish.palmschool.logic.dao.ActivityDao
 import com.fatballfish.palmschool.logic.model.school.School
 import com.fatballfish.palmschool.ui.mine.RealAuthUpdateViewModel
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_school_choosen.*
 import kotlinx.android.synthetic.main.fragment_school_choosen.toolbar_userInfoEdit
 
@@ -30,6 +31,7 @@ private const val ARG_PARAM2 = "value"
  * Use the [SchoolChoosenFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class SchoolChoosenFragment : Fragment() {
     private var key: String? = null
     private var value: String? = null

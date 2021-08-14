@@ -1,24 +1,21 @@
 package com.fatballfish.palmschool.ui.mine
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.fatballfish.palmschool.logic.Repository
+import com.fatballfish.palmschool.ui.TokenViewModel
 
-class UserInfoViewModel : ViewModel() {
+class UserInfoViewModel @ViewModelInject constructor(repository: Repository) : TokenViewModel(repository) {
     private val requestLiveData = MutableLiveData<String>()
     var local_token: String = ""
     val userInfoLiveData = Transformations.switchMap(requestLiveData) { token ->
-        Repository.getUserInfo(token)
+        repository.getUserInfo(token)
     }
 
     fun getUserInfo(token: String) {
         this.local_token = token
         requestLiveData.value = token
     }
-
-    fun isTokenSaved() = Repository.isTokenSaved()
-    fun getToken() = Repository.getToken()
-    fun saveToken(token: String) = Repository.saveToken(token)
-    fun removeToken() = Repository.removeToken()
 }

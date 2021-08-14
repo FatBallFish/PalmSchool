@@ -17,6 +17,7 @@ import com.fatballfish.palmschool.R
 import com.fatballfish.palmschool.logic.dao.ActivityDao
 
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_sms_login.*
 import kotlinx.android.synthetic.main.fragment_sms_login.edit_username
 
@@ -28,6 +29,7 @@ private const val ARG_PHONE = "phone"
  * Use the [SmsLoginFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class SmsLoginFragment : Fragment() {
     private var phone: String? = null
     private var rand: String? = null

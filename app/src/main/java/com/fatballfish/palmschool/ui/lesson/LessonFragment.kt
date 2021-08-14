@@ -17,8 +17,10 @@ import com.fatballfish.palmschool.R
 import com.fatballfish.palmschool.logic.dao.ActivityDao
 import com.fatballfish.palmschool.ui.login.LoginActivity
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_lessons.*
 
+@AndroidEntryPoint
 class LessonFragment : Fragment() {
     val lessonTemplateViewModel by lazy { ViewModelProvider(this)[LessonTemplateViewModel::class.java] }
     val templateViewModel by lazy { ViewModelProvider(this)[TemplateListViewModel::class.java] }

@@ -14,6 +14,7 @@ import androidx.navigation.Navigation
 import com.fatballfish.palmschool.R
 import com.fatballfish.palmschool.logic.dao.ActivityDao
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_pass_login.*
 import kotlinx.android.synthetic.main.fragment_pass_login.edit_username
 
@@ -24,6 +25,7 @@ private const val ARG_PHONE = "phone"
  * Use the [PassLoginFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 class PassLoginFragment : Fragment() {
     private var phone: String? = null
     val viewModel by lazy { ViewModelProvider(this)[PassLoginViewModel::class.java] }

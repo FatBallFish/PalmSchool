@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.fatballfish.palmschool.R
 import com.google.android.material.card.MaterialCardView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.lesson_info.view.*
 
 class LessonCardView : MaterialCardView {

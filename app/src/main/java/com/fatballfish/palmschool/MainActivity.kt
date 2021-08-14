@@ -25,11 +25,13 @@ import com.fatballfish.palmschool.ui.template.TemplateActivity
 import com.google.android.material.snackbar.Snackbar
 import com.nightonke.boommenu.BoomButtons.*
 import com.nightonke.boommenu.ButtonEnum
+import dagger.hilt.android.AndroidEntryPoint
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header.*
 import java.lang.StringBuilder
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     lateinit var receiver: LessonFragment.TemplateRefreshReceiver
     val userInfoViewModel by lazy { ViewModelProvider(this)[UserInfoViewModel::class.java] }

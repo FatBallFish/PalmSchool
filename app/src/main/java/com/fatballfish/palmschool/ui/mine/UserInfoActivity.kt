@@ -23,11 +23,12 @@ import com.fatballfish.palmschool.ui.login.LoginActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_user_info.*
 import kotlinx.android.synthetic.main.bottom_userinfo_setting.*
 import kotlinx.android.synthetic.main.nav_header.*
 
-
+@AndroidEntryPoint
 class UserInfoActivity : AppCompatActivity() {
     private lateinit var adapter: UserInfoAdapter
     val userInfoViewModel by lazy { ViewModelProvider(this)[UserInfoViewModel::class.java] }

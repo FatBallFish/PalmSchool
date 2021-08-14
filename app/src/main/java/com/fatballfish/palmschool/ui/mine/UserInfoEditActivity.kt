@@ -9,8 +9,10 @@ import com.fatballfish.palmschool.PalmSchoolApplication
 import com.fatballfish.palmschool.R
 import com.fatballfish.palmschool.ui.realAuth.RealAuthCreateFragment
 import com.fatballfish.palmschool.ui.school.SchoolChoosenFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_user_info_edit.*
 
+@AndroidEntryPoint
 class UserInfoEditActivity : AppCompatActivity() {
     private var key: String? = null
     private var value: String? = null

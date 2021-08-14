@@ -1,19 +1,22 @@
 package com.fatballfish.palmschool.ui.mine
 
 import android.widget.Toast
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import com.fatballfish.palmschool.PalmSchoolApplication
 
 import com.fatballfish.palmschool.logic.Repository
 import com.fatballfish.palmschool.logic.model.user.UserInfoUpdateRequest
 import com.fatballfish.palmschool.ui.TokenViewModel
 
-class UserInfoUpdateViewModel : TokenViewModel() {
+
+class UserInfoUpdateViewModel @ViewModelInject constructor(repository: Repository) : TokenViewModel(repository) {
     private var local_token: String = getToken()
     private val requestLiveData = MutableLiveData<UserInfoUpdateRequest>()
     val userInfoUpdateLiveData = Transformations.switchMap(requestLiveData) { request ->
-        Repository.updateUserInfo(local_token, request)
+        repository.updateUserInfo(local_token, request)
     }
 
     fun updateUserInfo(data: UserInfoUpdateRequest) {

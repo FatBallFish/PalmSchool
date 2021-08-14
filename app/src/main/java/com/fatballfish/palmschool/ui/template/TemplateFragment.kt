@@ -17,6 +17,7 @@ import com.fatballfish.palmschool.logic.dao.ActivityDao
 import com.fatballfish.palmschool.ui.lesson.CurrentTemplateViewModel
 import com.fatballfish.palmschool.ui.lesson.TemplateListViewModel
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_template.*
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,6 +28,8 @@ private const val ARG_PARAM1 = "token"
  * Use the [TemplateFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+@AndroidEntryPoint
 class TemplateFragment : Fragment() {
     private val templateViewModel by lazy { ViewModelProvider(this)[TemplateListViewModel::class.java] }
     val currentTemplateViewModel by lazy { ViewModelProvider(this)[CurrentTemplateViewModel::class.java] }

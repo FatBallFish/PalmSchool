@@ -1,7 +1,6 @@
 package com.fatballfish.palmschool.logic.network
 
 import com.fatballfish.palmschool.logic.model.lesson.LessonTemplateListRequest
-import com.fatballfish.palmschool.logic.model.lesson.LessonTemplateService
 import com.fatballfish.palmschool.logic.model.realAuth.RealAuthCreateRequest
 import com.fatballfish.palmschool.logic.model.realAuth.RealAuthUpdateRequest
 import com.fatballfish.palmschool.logic.model.template.CurrentTemplateUpdateRequest
@@ -9,14 +8,20 @@ import com.fatballfish.palmschool.logic.model.user.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
 import java.lang.RuntimeException
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-object PalmSchoolNetwork {
+@Singleton
+class PalmSchoolNetwork @Inject constructor(val retrofit: Retrofit) {
     // 登录服务
-    private val loginService = ServiceCreator.create<UserLoginService>()
+    @Inject
+    lateinit var loginService: UserLoginService
+//    private val loginService = ServiceCreator.create<UserLoginService>()
 
     // 短信登录
     suspend fun smsLogin(smsLoginRequest: SmsLoginRequest) =
@@ -27,7 +32,9 @@ object PalmSchoolNetwork {
         loginService.passLogin(passLoginRequest).await()
 
     // 验证码服务
-    private val smsCaptchaService = ServiceCreator.create<SmsCaptchaService>()
+    @Inject
+    lateinit var smsCaptchaService: SmsCaptchaService
+//    private val smsCaptchaService = ServiceCreator.create<SmsCaptchaService>()
 
     // 创建短信验证码
     suspend fun createSmsCaptcha(smsCaptchaCreateRequest: SmsCaptchaCreateRequest) =
@@ -39,7 +46,9 @@ object PalmSchoolNetwork {
     // 注册服务
 
     // 课程服务
-    val lessonTemplateService = ServiceCreator.create<LessonTemplateService>()
+    @Inject
+    lateinit var lessonTemplateService: LessonTemplateService
+//    val lessonTemplateService = ServiceCreator.create<LessonTemplateService>()
 
     // 获取个人课程列表
     suspend fun getLessonTemplateList(lessonTemplateListRequest: LessonTemplateListRequest) =
@@ -49,7 +58,9 @@ object PalmSchoolNetwork {
         ).await()
 
     // 模版服务
-    val templateService = ServiceCreator.create<TemplateService>()
+    @Inject
+    lateinit var templateService: TemplateService
+//    val templateService = ServiceCreator.create<TemplateService>()
     suspend fun getTemplateList(token: String, map: Map<String, String>) =
         templateService.getTemplateList(token, map).await()
 
@@ -62,7 +73,9 @@ object PalmSchoolNetwork {
         templateService.updateCurrentTemplateId(token, tid).await()
 
     // 用户信息服务
-    val userInfoService = ServiceCreator.create<UserInfoService>()
+    @Inject
+    lateinit var userInfoService: UserInfoService
+//    val userInfoService = ServiceCreator.create<UserInfoService>()
 
     // 获取用户信息
     suspend fun getUserInfo(token: String) = userInfoService.getUserInfo(token).await()
@@ -72,14 +85,18 @@ object PalmSchoolNetwork {
         userInfoService.updateUserInfo(token, data).await()
 
     // 头像服务
-    val portraitService = ServiceCreator.create<PortraitService>()
+    @Inject
+    lateinit var portraitService: PortraitService
+//    val portraitService = ServiceCreator.create<PortraitService>()
 
     // 头像上传
     suspend fun uploadPortrait(token: String, data: PortraitUploadRequest) =
         portraitService.uploadPortrait(token, data).await()
 
     // 实名认证服务
-    val realAuthService = ServiceCreator.create<RealAuthService>()
+    @Inject
+    lateinit var realAuthService: RealAuthService
+//    val realAuthService = ServiceCreator.create<RealAuthService>()
 
     // 实名信息更新
     suspend fun updateRealAuth(token: String, data: RealAuthUpdateRequest) =
@@ -90,7 +107,9 @@ object PalmSchoolNetwork {
         realAuthService.createRealAuth(token, data).await()
 
     // 学校服务
-    val schoolService = ServiceCreator.create<SchoolService>()
+    @Inject
+    lateinit var schoolService: SchoolService
+//    val schoolService = ServiceCreator.create<SchoolService>()
 
     // 获取学校列表
     suspend fun getSchoolList(token: String, map: Map<String, String>) =

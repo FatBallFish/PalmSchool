@@ -23,9 +23,10 @@ import com.fatballfish.palmschool.logic.util.TimeStampUtil
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_user_info_card.*
 
-
+@AndroidEntryPoint
 class UserInfoCardActivity : AppCompatActivity() {
     private val userInfoViewModel by lazy { ViewModelProvider(this)[UserInfoViewModel::class.java] }
     val userInfoUpdateViewModel by lazy { ViewModelProvider(this)[UserInfoUpdateViewModel::class.java] }
